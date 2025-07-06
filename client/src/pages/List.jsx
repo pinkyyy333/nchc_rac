@@ -1,6 +1,6 @@
-// client/src/pages/List.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
+import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 
 export default function List() {
@@ -13,6 +13,15 @@ export default function List() {
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
   }, []);
+
+  const columns = useMemo(() => [
+    { name: '主持人',        selector: row => row['主持人'],        sortable: true },
+    { name: '計畫名稱',      selector: row => row['計畫名稱'],      sortable: true, wrap: true },
+    { name: '計畫編號',      selector: row => row['計畫編號'],      sortable: true },
+    { name: '需求用量',        selector: row => row['需求用量'],   sortable: true, right: true },
+    { name: '方案一核發量',  selector: row => row['方案一核發量'],  sortable: true, right: true },
+    { name: '時間',          selector: row => row['時間']      ,   sortable: true },
+  ], []);
 
   return (
     <>
@@ -33,10 +42,8 @@ export default function List() {
         .btn.primary { background:#dbae67; color:#fff; border-color:#c79952; }
 
         .container { max-width:960px; margin:30px auto; background:#fff; padding:20px; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.1); }
-        table { width:100%; border-collapse:collapse; margin-top:10px; }
-        th, td { padding:10px; border:1px solid #ddd; text-align:left; font-size:14px; }
-        th { background:#336699; color:#fff; font-weight:normal; }
-
+        .data-table { margin-top:10px; }
+        
         footer { margin-top:40px; background:linear-gradient(180deg,#00c2d7,#00538d); color:#fff; padding:40px 30px; }
         .footer-content { display:flex; flex-wrap:wrap; justify-content:space-between; }
         .footer-section { flex:1 1 200px; margin:10px; }
@@ -49,7 +56,7 @@ export default function List() {
         <div className="logo">RAC 資源申請平台</div>
         <nav>
           <ul>
-            <li><Link to="/" >計畫介紹</Link></li>
+            <li><Link to="/">計畫介紹</Link></li>
             <li><Link to="/apply">申請流程</Link></li>
             <li><Link to="/list" className="active">通過名單</Link></li>
             <li><Link to="/quota">額度申請</Link></li>
@@ -66,30 +73,15 @@ export default function List() {
         {loading ? (
           <p>載入中…</p>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>主持人</th>
-                <th>計畫名稱</th>
-                <th>計畫編號</th>
-                <th>處室別</th>
-                <th>方案一核發量</th>
-                <th>備註</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r, idx) => (
-                <tr key={idx}>
-                  <td>{r['主持人']}</td>
-                  <td>{r['計畫名稱']}</td>
-                  <td>{r['計畫編號']}</td>
-                  <td>{r['處室別']}</td>
-                  <td>{r['方案一核發量']}</td>
-                  <td>{r['備註'] || '無備註'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <DataTable
+            className="data-table"
+            columns={columns}
+            data={rows}
+            pagination
+            highlightOnHover
+            defaultSortField="主持人"
+            responsive
+          />
         )}
       </div>
 
