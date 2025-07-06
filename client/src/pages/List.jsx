@@ -1,32 +1,17 @@
-import React, { useEffect } from 'react';
+// client/src/pages/List.jsx
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 export default function List() {
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    // 若已在 public/index.html 引入 jQuery 與 DataTables，可在此初始化
-    if (window.$ && window.$.fn.DataTable) {
-      window.$('#approvalTable').DataTable({
-        ajax: {
-          url: '/data/rac_approved.json',
-          dataSrc: ''
-        },
-        columns: [
-          { data: '主持人' },
-          { data: '計畫名稱' },
-          { data: '計畫編號' },
-          { data: '處室別' },
-          { data: '方案一核發量' },
-          {
-            data: '備註',
-            render: d => (d === null || d === '' ? '無備註' : d)
-          }
-        ],
-        paging: true,
-        searching: true,
-        ordering: true,
-        order: [[0, 'asc']]
-      });
-    }
+    axios.get('/data/rac_approved.json')
+      .then(res => setRows(res.data))
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -37,17 +22,21 @@ export default function List() {
         h2, h3, h4 { color:#2bbbad; }
         a { color:#0098c9; text-decoration:none; }
         a:hover { text-decoration:underline; }
+
         header { background:#fff; padding:15px 30px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 4px rgba(0,0,0,0.1); }
         .logo { font-size:24px; font-weight:bold; color:#2bbbad; }
         nav ul { list-style:none; display:flex; gap:20px; }
-        nav a { font-size:16px; color:#333; }
+        nav a { font-size:16px; color:#333; text-decoration:none; }
         nav a.active { font-weight:bold; border-bottom:2px solid #2bbbad; }
         .btn-group { display:flex; gap:10px; }
-        .btn { padding:6px 12px; border:1px solid #e0e0e0; border-radius:4px; background:#f0f0f0; cursor:pointer; }
+        .btn { padding:6px 12px; border:1px solid #e0e0e0; border-radius:4px; background:#f0f0f0; cursor:pointer; text-decoration:none; color:#333; }
         .btn.primary { background:#dbae67; color:#fff; border-color:#c79952; }
+
         .container { max-width:960px; margin:30px auto; background:#fff; padding:20px; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.1); }
-        table.display { width:100%; }
+        table { width:100%; border-collapse:collapse; margin-top:10px; }
         th, td { padding:10px; border:1px solid #ddd; text-align:left; font-size:14px; }
+        th { background:#336699; color:#fff; font-weight:normal; }
+
         footer { margin-top:40px; background:linear-gradient(180deg,#00c2d7,#00538d); color:#fff; padding:40px 30px; }
         .footer-content { display:flex; flex-wrap:wrap; justify-content:space-between; }
         .footer-section { flex:1 1 200px; margin:10px; }
@@ -60,7 +49,7 @@ export default function List() {
         <div className="logo">RAC 資源申請平台</div>
         <nav>
           <ul>
-            <li><Link to="/">計畫介紹</Link></li>
+            <li><Link to="/" >計畫介紹</Link></li>
             <li><Link to="/apply">申請流程</Link></li>
             <li><Link to="/list" className="active">通過名單</Link></li>
             <li><Link to="/quota">額度申請</Link></li>
@@ -74,19 +63,34 @@ export default function List() {
 
       <div className="container">
         <h2>通過名單</h2>
-        <table id="approvalTable" className="display">
-          <thead>
-            <tr>
-              <th>主持人</th>
-              <th>計畫名稱</th>
-              <th>計畫編號</th>
-              <th>處室別</th>
-              <th>方案一核發量</th>
-              <th>備註</th>
-            </tr>
-          </thead>
-          <tbody />
-        </table>
+        {loading ? (
+          <p>載入中…</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>主持人</th>
+                <th>計畫名稱</th>
+                <th>計畫編號</th>
+                <th>處室別</th>
+                <th>方案一核發量</th>
+                <th>備註</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, idx) => (
+                <tr key={idx}>
+                  <td>{r['主持人']}</td>
+                  <td>{r['計畫名稱']}</td>
+                  <td>{r['計畫編號']}</td>
+                  <td>{r['處室別']}</td>
+                  <td>{r['方案一核發量']}</td>
+                  <td>{r['備註'] || '無備註'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <footer>

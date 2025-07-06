@@ -79,10 +79,10 @@ export default function Register() {
         <div className="logo">RAC 資源申請平台</div>
         <nav>
           <ul>
-            <li><Link to="/"     className="btn">計畫介紹</Link></li>
-            <li><Link to="/apply" className="btn">申請流程</Link></li>
-            <li><Link to="/list"  className="btn">通過名單</Link></li>
-            <li><Link to="/quota" className="btn">額度申請</Link></li>
+            <li><Link to="/">計畫介紹</Link></li>
+            <li><Link to="/apply">申請流程</Link></li>
+            <li><Link to="/list" >通過名單</Link></li>
+            <li><Link to="/quota">額度申請</Link></li>
           </ul>
         </nav>
         <div className="btn-group">

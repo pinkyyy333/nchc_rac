@@ -1,43 +1,38 @@
+// client/src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
+import Index from './pages/Index';
+import Apply from './pages/Apply';
+import List from './pages/List';
 import Quota from './pages/Quota';
-import logo from './logo.svg';
+import Login from './pages/Login';
+import Register from './pages/Register';
+
 import './App.css';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* 根路由，顯示原本的 CRA 歡迎畫面 */}
-        <Route
-          path="/"
-          element={
-            <div className="App">
-              <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                  Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a
-                  className="App-link"
-                  href="https://reactjs.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Learn React
-                </a>
-              </header>
-            </div>
-          }
-        />
+        {/* 首頁 — 計畫介紹 */}
+        <Route path="/" element={<Index />} />
 
-        {/* 額度申請頁面 */}
+        {/* 申請流程 */}
+        <Route path="/apply" element={<Apply />} />
+
+        {/* 通過名單 */}
+        <Route path="/list" element={<List />} />
+
+        {/* 額度申請 */}
         <Route path="/quota" element={<Quota />} />
 
-        {/* 其他尚未實作的頁面路由可以依需求增加 */}
-        {/* <Route path="/list" element={<List />} /> */}
-        {/* <Route path="/login" element={<Login />} /> */}
+        {/* 登入註冊 */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
+        {/* 找不到路由時導回首頁 */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );

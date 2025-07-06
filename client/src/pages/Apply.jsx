@@ -1,5 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import exampleForm from 'assets/images/example-form.png';
+import exampleSheet from 'assets/images/example-sheet.png';
+import exampleEfficiency from 'assets/images/example-efficiency.png';
 
 export default function Apply() {
   return (
@@ -76,7 +79,7 @@ export default function Apply() {
             <li>請將「高效能計算資源使用申請表」及 CM01.pdf、CM02.pdf，一併寄至國網中心收案窗口 (<a href="mailto:rac@narlabs.org.tw">rac@narlabs.org.tw</a>)。</li>
           </ul>
           <div className="image-container">
-            <img src="/example-form.png" alt="表單填寫說明" />
+            <img src={exampleForm} alt="表單填寫說明" />
           </div>
         </section>
 
@@ -99,7 +102,7 @@ export default function Apply() {
           <br />
           <strong>可用表格敘述</strong>
           <div className="image-container">
-            <img src="/example-sheet.png" alt="必要性表格" />
+            <img src={exampleSheet} alt="必要性表格" />
           </div>
 
           <h4>效率評估</h4>
@@ -109,7 +112,8 @@ export default function Apply() {
             <li><a href="https://hpc-wiki.info/hpc/Scaling" target="_blank" rel="noopener noreferrer">HPC Wiki: Scaling</a></li>
           </ul>
           <div className="image-container">
-            <img src="/example-form.png" alt="效率評估" />
+            <img src="/example-efficiency.png" alt="效率評估" />
+            <img src={exampleEfficiency} alt="效率評估" />
           </div>
         </section>
       </div>
